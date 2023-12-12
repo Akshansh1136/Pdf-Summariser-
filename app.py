@@ -1,6 +1,6 @@
 import os, tempfile
 import streamlit as st
-from langchain.llms.openai import OpenAI
+from langchain.chat_models import ChatOpenAI
 from langchain.vectorstores.chroma import Chroma
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.chains.summarize import load_summarize_chain
@@ -52,7 +52,7 @@ if st.button("Summarize"):
             vectordb = Chroma.from_documents(pages, embeddings)
 
             # Initialize the OpenAI module, load and run the summarize chain
-            llm=OpenAI(temperature=0, openai_api_key=openai_api_key)
+            llm=ChatOpenAI(temperature=0,model="gpt-3.5-turbo", openai_api_key=openai_api_key)
             chain = load_summarize_chain(llm, chain_type="stuff")
             search = vectordb.similarity_search(" ")
             summary = chain.run(input_documents=search, question="Write a summary and explain about each part in breif.")
